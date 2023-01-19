@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+     {% if category %}
+        {{category.description|truncatewords:155 }}
+     {% else %}
+         Welcome to our Grocery store where you can buy online with speed delivery...
+     {% endif %}
+{% endblock %}
+{% block title %}
+     {% if category %}
+        {{category.name}} - Grocery Store
+     {% else %}
+         See our New Items - Grocery Store
+     {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+
+     <div>
+         <div class="row my_row_class">
+             <div class="mx-auto">
+             <p><a href="{% url 'shopon:allProdCat' %}">Our Items Collections</a></p>
+             </div>
+         </div>
+     </div>
+     {% endif %}
+<div class="mx_auto">
+    {% if category  %}
+          <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" style="width:100%;height:500px;">
+</div>
+      <br>
+<div>
+          <h1 class="text-center my_title">{{category.name}}</h1>
+          <p class="text-justify">{{category.description}}</p>
+</div>
+     {% else %}
+<div>
+    <img class="my_image   my_image_padding" src="{% static 'img/ban1.png' %}" alt="our products" style="width:100%;height:500px;">
+</div>
+<br>
+<div>
+    <h1> Our Grocery Items </h1>
+    <p> Grocery means Ffood and foodstuffs, green groceries, beverages and household goods usually prepackaged or measured into quantities for household use from containers made for retail grocery or baking sales and not generally suitable for immediate consumption by the purchaser. Grocery items, sometimes called staples, include, by way of illustration and not limitation, sugar, flour, spices, dry pasta, loaves of bread, ground coffee, coffee beans and loose or bagged tea, bottled and unopened wine, cooking oils, four (4) or more rolls, donuts or other baked goods, canned, bottled, and jarred goods (other than individual, nonalcoholic beverages sold with food).</p>
+</div>
+     {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4  xol-lg-4 ">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" style="height:18rem;column:18rem;" ></a>
+            <div class="card-body ">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+               <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+
+</div>
+{% endblock %}
+
+
